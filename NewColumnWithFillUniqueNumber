@@ -1,0 +1,16 @@
+Add new column to existing table and populate unique sequence number for the existing rows
+---------------------------------------------------------------------
+As an option you can initially create Null-able column, then update your table column with valid not null values and finally ALTER column to set NOT NULL constraint:
+ALTER TABLE MY_TABLE ADD STAGE INT NULL
+GO
+UPDATE x
+SET x.<Id> = x.New_Id
+FROM (
+  SELECT <Id>, ROW_NUMBER() OVER (ORDER BY <tablekey>) AS New_Id
+  FROM <tablename>
+  ) x
+GO
+ALTER TABLE MY_TABLE ALTER COLUMN STAGE INT NOT NULL
+GO
+Ref link: https://stackoverflow.com/questions/4862385/sql-server-add-auto-increment-primary-key-to-existing-table
+https://stackoverflow.com/questions/3492947/insert-a-not-null-column-to-an-existing-table
